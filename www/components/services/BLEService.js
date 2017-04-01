@@ -2,7 +2,7 @@
  * Created by bakeneko on 12/31/16.
  */
 
-stepMonitorApp.factory('$BLEService', function ($rootScope, $q) {
+angular.module('StepMonitor').factory('$BLEService', function ($rootScope, $q) {
 
 
     // ASCII only

@@ -4,7 +4,7 @@
 
 
 
-stepMonitorApp
+angular.module('StepMonitor')
     .controller('MonitorController', function($scope, $rootScope, $BLEService) {
 
         //What the device send should match this order

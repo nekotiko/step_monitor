@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <script src="components/loader.js"></script>
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/onsenui/js/onsenui.min.js"></script>
+    <script src="lib/onsenui/js/angular-onsenui.min.js"></script>
+    <script src="lib/onsenui/js/angular-onsenui.min.js"></script>
+
+
+    <link rel="stylesheet" href="components/loader.css">
+    <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script>
+
+        var stepMonitorApp = ons.bootstrap('StepMonitor',[]);
+
+        stepMonitorApp.controller('AppController', function($scope, $DBService) {
+            $DBService.initialize_db();
+        });
+
+
+
+        console.log("twice")
+
+    </script>
+    <script src="components/services/BLEService.js"></script>
+    <script src="components/services/DBService.js"></script>
+</head>
+
+<body>
+<ons-page ng-controller="AppController as app" >
+    <ons-toolbar>
+        <div class="center">Step Monitor - {{app.title}}</div>
+    </ons-toolbar>
+
+    <ons-tabbar position="auto">
+        <ons-tab page="components/devices/devices.html" label="Devices" icon="square" active></ons-tab>
+        <ons-tab page="components/monitor/monitor.html" label="Monitor" icon="square"></ons-tab>
+        <ons-tab page="components/records/records.html" label="Records" icon="square"></ons-tab>
+        <ons-tab page="dummy.html" label="Dummy" icon="square"></ons-tab>
+
+    </ons-tabbar>
+</ons-page>
+
+<ons-template id="dummy.html">
+    <script>
+        stepMonitorApp.controller('Dummy', function () {
+            console.log('Dummy Record Found');
+        });
+    </script>
+    <ons-page>
+
+        <div class="content" style="text-align: center" ng-controller="Dummy">
+        </div>
+    </ons-page>
+</ons-template>
+
+</body>
+
+
+
+
+<script src="components/devices/devices.js"></script>
+
+<script src="components/monitor/monitor.js"></script>
+
+</html>

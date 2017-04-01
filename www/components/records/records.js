@@ -4,9 +4,11 @@
 
 
 var RECORDS_FOUND = 'records_found';
-stepMonitorApp
+angular.module('StepMonitor')
     .controller('RecordsController', function ($scope, $rootScope, $DBService) {
-            console.log('Record init'),
+
+            console.log('Records Controller Loaded');
+
             $scope.availableRecords = [],
             $scope.recording = false,
             $scope.recording_zero_instant = 0,
@@ -20,8 +22,15 @@ stepMonitorApp
                 if (results.buttonIndex == 1){ //Ok
                     $scope.recording = true;
                     $scope.recording_zero_instant = (new Date()).getTime();
-                    console.log(results.input1);
+                    var name = results.input1;
+                    if (name)
+                        $DBService.create_workout(name);
+                    else{
+
+                    }
                 }
+
+
              } ,
 
             $scope.startRecording = function () {
@@ -43,7 +52,15 @@ stepMonitorApp
             },
 
             $rootScope.$on(RECORDS_FOUND, function(event_name, records){
+                console.log('Record Found');
                 console.log(records);
-                $scope.availableRecords.push({id: 'abc', name: 'TEst Record'});
+                if (!records){
+                    records.push({id: 'abc', name: 'TEst Record'});
+                }
+                $scope.availableRecords.length = 0;
+                $scope.availableRecords.push(records);
+                $rootScope.$digest();
+
             })
     });
+

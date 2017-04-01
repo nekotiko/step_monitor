@@ -4,10 +4,9 @@
 
 var DEVICE_FOUND = 'new_device';
 
-stepMonitorApp
+angular.module('StepMonitor')
     .controller('DevicesController', function ($scope, $rootScope, $BLEService, $timeout) {
 
-        console.log('Device init'),
 
         $scope.availableDevices = [],
         $scope.selectedDevice = null,

@@ -1,55 +1,136 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
-  <script src="components/loader.js"></script>
-  <script src="lib/angular/angular.min.js"></script>
-  <script src="lib/onsenui/js/onsenui.min.js"></script>
-  <script src="lib/onsenui/js/angular-onsenui.min.js"></script>
-  <script src="lib/onsenui/js/angular-onsenui.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <script src="components/loader.js"></script>
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/onsenui/js/onsenui.min.js"></script>
+    <script src="lib/onsenui/js/angular-onsenui.min.js"></script>
 
+    <link rel="stylesheet" href="components/loader.css">
+    <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        ons.bootstrap('StepMonitor', []);
+    </script>
 
-  <link rel="stylesheet" href="components/loader.css">
-  <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
-  <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
-  <link rel="stylesheet" href="css/style.css">
+    <script src="components/services/BLEService.js"></script>
+    <script src="components/services/DBService.js"></script>
+    <script src="components/devices/devices.js"></script>
+    <script src="components/monitor/monitor.js"></script>
+    <script src="components/records/records.js"></script>
 
-  <script>
+    <script>
+        angular.module('StepMonitor')
+            .controller('AppController', function($scope) {
+                this.load = function(page) {
+                    $scope.splitter.content.load(page);
+                    $scope.splitter.left.close();
+                };
 
+                this.toggle = function() {
+                    $scope.splitter.left.toggle();
+                };
+            });
 
-
-    var stepMonitorApp = ons.bootstrap('StepMonitor',['onsen'])
-      .controller('AppController', function($scope, $DBService) {
-          $DBService.initialize_db();
-      });
-
-     console.log("twice")
-
-  </script>
+        ons.ready(function() {
+            console.log("Onsen UI is ready!");
+        });
+    </script>
 
 </head>
-
 <body>
-  <ons-page ng-controller="AppController as app" >
-    <ons-toolbar>
-      <div class="center">Step Monitor - {{app.title}}</div>
-    </ons-toolbar>
 
-    <ons-tabbar position="auto">
-      <ons-tab page="components/devices/devices.html" label="Devices" icon="square" active></ons-tab>
-      <ons-tab page="components/monitor/monitor.html" label="Monitor" icon="square"></ons-tab>
-      <ons-tab page="components/records/records.html" label="Records" icon="square"></ons-tab>
-    </ons-tabbar>
-  </ons-page>
+<ons-splitter ng-controller="AppController as app" var="splitter">
+    <ons-splitter-side side="left" width="220px" collapse swipeable>
+        <ons-page>
+            <ons-list>
+                <ons-list-item ng-click="app.load('devices.html')" tappable>
+                    Devices
+                </ons-list-item>
+                <ons-list-item ng-click="app.load('monitor.html')" tappable>
+                    Monitor
+                </ons-list-item>
+                <ons-list-item ng-click="app.load('records.html')" tappable>
+                    Records
+                </ons-list-item>
+            </ons-list>
+        </ons-page>
+    </ons-splitter-side>
+    <ons-splitter-content page="index.html"></ons-splitter-content>
+</ons-splitter>
 
+<ons-template id="index.html">
+    <ons-page>
+        <ons-toolbar>
+            <div class="left">
+                <ons-toolbar-button ng-click="app.toggle()">
+                    <ons-icon icon="md-menu"></ons-icon>
+                </ons-toolbar-button>
+            </div>
+            <div class="center">
+                Main
+            </div>
+        </ons-toolbar>
+        <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
+            Swipe right to open the menu!
+        </p>
+    </ons-page>
+</ons-template>
+
+
+<ons-template id="devices.html">
+    <ons-page  ons-show="app.title = 'Devices'" ng-controller="DevicesController as dc" >
+        <div class="content" style="text-align: center">
+            <ons-list id="device_list">
+                <ons-list-item tappable ng-repeat="item in availableDevices" ng-click="connectDevice(item)">{{item.name}}</ons-list-item>
+            </ons-list>
+            <ons-button ng-click="startMonitoring()" ng-disabled="!selectedDevice">Start Data</ons-button>
+            <ons-button ng-click="disconnect()" ng-disabled="!selectedDevice">Disconnect</ons-button>
+        </div>
+    </ons-page>
+</ons-template>
+
+<ons-template id="monitor.html">
+    <ons-page  ons-show="app.title = 'Monitor'" ng-controller="MonitorController as monitor">
+        <div class="content" style="text-align: center">
+            <div class="soles_container">
+                <img src="images/soles.png" class="soles_fg" >
+                <div class="soles_bk">
+                    <div class="left_sole_container">
+                        <div id="l_thumb" style="height:15%;background-color: rgb({{LEFT_FEET.T}}, 255,{{LEFT_FEET.T}});"></div>
+                        <div id="l_sole"  class="zone" style="height:35%; background-color:  rgb({{LEFT_FEET.S}}, 255, {{LEFT_FEET.S}})"></div>
+                        <div id="l_instep"class="zone" style="height:24.75%; background-color: rgb({{LEFT_FEET.I}}, 255, {{LEFT_FEET.I}})"></div>
+                        <div id="l_heel"  class="zone" style="height:25.25%; background-color: rgb({{LEFT_FEET.H}}, 255, {{LEFT_FEET.H}})"></div>
+                    </div>
+
+                    <div class="right_sole_container">
+                        <div id="r_thumb" class="zone" style="height:15%;background-color: rgb({{RIGHT_FEET.T}}, 255, {{RIGHT_FEET.T}});"></div>
+                        <div id="r_sole"  class="zone" style="height:35%; background-color:  rgb({{RIGHT_FEET.S}}, 255, {{RIGHT_FEET.S}})"></div>
+                        <div id="r_instep"class="zone" style="height:24.75%; background-color: rgb({{RIGHT_FEET.I}}, 255, {{RIGHT_FEET.I}})"></div>
+                        <div id="r_heel"  class="zone" style="height:25.25%; background-color: rgb({{RIGHT_FEET.H}}, 255, {{RIGHT_FEET.H}})"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ons-page>
+</ons-template>
+
+<ons-template id="records.html">
+    <ons-page  ons-show="load_records()" >
+        <div class="content" style="text-align: center" ng-controller="RecordsController">
+            <ons-button ng-click="startRecording()" ng-disabled="recording">Start Recording</ons-button>
+            <ons-button ng-click="stopRecording()" ng-disabled="!recording">Stop</ons-button>
+            <ons-list id="record_list">
+                <ons-list-item tappable ng-repeat="item in availableRecords"> {{item.name}}</ons-list-item>
+            </ons-list>
+        </div>
+    </ons-page>
+</ons-template>
 </body>
-<script src="components/services/BLEService.js"></script>
-<script src="components/services/DBService.js"></script>
-<script src="components/devices/devices.js"></script>
-<script src="components/monitor/monitor.js"></script>
-<script src="components/records/records.js"></script>
-
 
 </html>

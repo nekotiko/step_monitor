@@ -3,7 +3,7 @@
  */
 
 
-stepMonitorApp.factory('$DBService', function ($rootScope, $q) {
+angular.module('StepMonitor').factory('$DBService', function ($rootScope, $q) {
 
 
     function generateUUID() { // Public Domain/MIT
