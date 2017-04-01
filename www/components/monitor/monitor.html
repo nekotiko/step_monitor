@@ -1,0 +1,23 @@
+<ons-page  ons-show="app.title = 'Monitor'" ng-controller="MonitorController as monitor">
+    <div class="content" style="text-align: center">
+        <div class="soles_container">
+            <img src="images/soles.png" class="soles_fg" >
+            <div class="soles_bk">
+                <div class="left_sole_container">
+                    <div id="l_thumb" style="height:15%;background-color: rgb({{LEFT_FEET.T}}, 255,{{LEFT_FEET.T}});"></div>
+                    <div id="l_sole"  class="zone" style="height:35%; background-color:  rgb({{LEFT_FEET.S}}, 255, {{LEFT_FEET.S}})"></div>
+                    <div id="l_instep"class="zone" style="height:24.75%; background-color: rgb({{LEFT_FEET.I}}, 255, {{LEFT_FEET.I}})"></div>
+                    <div id="l_heel"  class="zone" style="height:25.25%; background-color: rgb({{LEFT_FEET.H}}, 255, {{LEFT_FEET.H}})"></div>
+                </div>
+
+                <div class="right_sole_container">
+                    <div id="r_thumb" class="zone" style="height:15%;background-color: rgb({{RIGHT_FEET.T}}, 255, {{RIGHT_FEET.T}});"></div>
+                    <div id="r_sole"  class="zone" style="height:35%; background-color:  rgb({{RIGHT_FEET.S}}, 255, {{RIGHT_FEET.S}})"></div>
+                    <div id="r_instep"class="zone" style="height:24.75%; background-color: rgb({{RIGHT_FEET.I}}, 255, {{RIGHT_FEET.I}})"></div>
+                    <div id="r_heel"  class="zone" style="height:25.25%; background-color: rgb({{RIGHT_FEET.H}}, 255, {{RIGHT_FEET.H}})"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</ons-page>

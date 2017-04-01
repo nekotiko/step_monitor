@@ -1,0 +1,10 @@
+
+<ons-page  ons-show="app.title = 'Devices'" ng-controller="DevicesController as dc" >
+    <div class="content" style="text-align: center">
+        <ons-list id="device_list">
+            <ons-list-item tappable ng-repeat="item in availableDevices" ng-click="connectDevice(item)">{{item.name}}</ons-list-item>
+        </ons-list>
+        <ons-button ng-click="startMonitoring()" ng-disabled="!selectedDevice">Start Data</ons-button>
+        <ons-button ng-click="disconnect()" ng-disabled="!selectedDevice">Disconnect</ons-button>
+    </div>
+</ons-page>
