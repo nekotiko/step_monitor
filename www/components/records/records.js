@@ -4,7 +4,7 @@
 
 
 stepMonitorApp
-    .controller('DevicesController', function ($scope, $rootScope, $DBService, $timeout) {
+    .controller('RecordsController', function ($scope, $rootScope, $DBService, $timeout) {
 
 
             $scope.availableRecords = [],

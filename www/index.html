@@ -21,9 +21,9 @@
 
 
     var stepMonitorApp = ons.bootstrap('StepMonitor',[])
-      .controller('AppController', function($scope) {
+      .controller('AppController', function($scope, $DBService) {
 
-
+          $DBService.initialize_db();
 
       });
 
@@ -38,21 +38,17 @@
     <ons-tabbar position="auto">
       <ons-tab page="components/devices/devices.html" label="Devices" icon="square" active></ons-tab>
       <ons-tab page="components/monitor/monitor.html" label="Monitor" icon="square"></ons-tab>
-      <ons-tab page="components/monitor/records.html" label="Records" icon="square"></ons-tab>
+      <ons-tab page="components/records/records.html" label="Records" icon="square"></ons-tab>
     </ons-tabbar>
   </ons-page>
 
 
-  <ons-template id="page2.html">
-    <ons-page ons-show="app.title = 'Page 2'">
-      <div class="content" style="text-align: center">
-        <p>Page 2 content</p>
-      </div>
-    </ons-page>
-  </ons-template>
+
 
 </body>
 <script src="components/services/BLEService.js"></script>
+<script src="components/services/DBService.js"></script>
 <script src="components/devices/devices.js"></script>
 <script src="components/monitor/monitor.js"></script>
+<script src="components/records/records.js"></script>
 </html>
