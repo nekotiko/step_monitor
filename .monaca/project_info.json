@@ -11,7 +11,6 @@
         "cordova-plugin-splashscreen@3.2.2",
         "cordova-custom-config@2.0.3",
         "cordova-plugin-device@1.1.2",
-        "https:\/\/github.com\/Telerik-Verified-Plugins\/EmailComposer",
         "cordova-plugin-dialogs@1.2.1"
     ]
 }

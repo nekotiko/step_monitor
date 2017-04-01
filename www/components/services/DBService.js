@@ -24,43 +24,35 @@ stepMonitorApp.factory('$DBService', function ($rootScope, $q) {
 
 
         db_error: function(err){
-            console.error('DB Init Err: ' + err);
+            console.error('DB Init Err: ' + err.message);
         },
 
 
         initialize_db: function () {
-            try {
-                dbService.transaction(function (tx) {
+                dbService.db_instance.transaction(function (tx) {
 
                     tx.executeSql('CREATE TABLE IF NOT EXISTS workout (id unique, name NVARCHAR(100), ' +
-                        'start DATE, end DATE )');
+                        'start DATE, end DATE );');
 
-                    tx.executeSql('CREATE TABLE IF NOT EXISTS details (workout_id , instant INT' +
-                        'R_H SMALLINT, R_S SMALLINT, R_I SMALLINT, R_T SMALLINT ' +
-                        'L_H SMALLINT, L_S SMALLINT, L_I SMALLINT, L_T SMALLINT ');
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS details (workout_id , instant INT, ' +
+                        'r_h INT, r_s INT, r_i INT, r_t INT, ' +
+                        'l_h INT, l_s INT, l_i INT, l_t INT); ');
                     console.log('DB successfully initialized');
                 }, dbService.db_error);
-            } catch (err) {
-                console.error('DB Init Err: ' + err);
-            }
+
         },
 
 
         create_workout: function (name) {
-            try {
-                dbService.transaction(function (tx) {
-                    var id = generateUUID();
+                var id = generateUUID();
+            dbService.db_instance.transaction(function (tx) {
+
                     var start_date = (new Date()).toISOString();
 
                     tx.executeSql('INSERT INTO workout VALUES("' + id + '","' +
                         name + '", "' + start_date + '", null)');
-
                 }, dbService.db_error);
 
-            } catch (err) {
-                console.error('Create workout Err: ' + err);
-                id = null;
-            }
             return id;
         },
 
@@ -68,7 +60,7 @@ stepMonitorApp.factory('$DBService', function ($rootScope, $q) {
         insert_event: function (workout_id, instant, reading_array) {
             try {
 
-                dbService.transaction(function (tx) {
+                dbService.db_instance.transaction(function (tx) {
                     tx.executeSql('INSERT INTO details VALUES("' + workout_id + '","' +
                         instant + '", "' + reading_array.join(',') + '", null)');
                 });
