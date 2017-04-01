@@ -64,6 +64,15 @@ angular.module('StepMonitor').factory('$DBService', function ($rootScope, $q) {
                 },dbService.db_error);
         },
 
+
+        delete_workout: function (workout_id) {
+           dbService.db_instance.transaction(function (tx) {
+               tx.executeSql('DELETE FROM details WHERE workout_id = "' + workout_id + '";' ,dbService.db_error);
+               tx.executeSql('DELETE FROM workout WHERE workout = "' + workout_id + '";' ,dbService.db_error);
+
+           })
+        },
+
         load_workouts: function (result_callback) {
             dbService.db_instance.transaction(function (tx) {
                 tx.executeSql('SELECT id, name FROM workout;', [], result_callback, dbService.db_error)

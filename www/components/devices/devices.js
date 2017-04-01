@@ -54,7 +54,6 @@ angular.module('StepMonitor')
         },
 
         $scope.$on($BLEService.ON_DATA_EVENT, function (event, data) {
-            console.log('On Recived Data: ' + data);
             $scope.startMonitoring();
         }),
 

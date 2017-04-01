@@ -25,7 +25,7 @@
 
     <script>
         angular.module('StepMonitor')
-            .controller('AppController', function($scope) {
+            .controller('AppController', function($scope, $DBService) {
                 this.load = function(page) {
                     $scope.splitter.content.load(page);
                     $scope.splitter.left.close();
@@ -34,6 +34,9 @@
                 this.toggle = function() {
                     $scope.splitter.left.toggle();
                 };
+
+                $DBService.initialize_db();
+
             });
 
         ons.ready(function() {
@@ -84,6 +87,16 @@
 
 <ons-template id="devices.html">
     <ons-page  ons-show="app.title = 'Devices'" ng-controller="DevicesController as dc" >
+        <ons-toolbar>
+            <div class="left">
+                <ons-toolbar-button ng-click="app.toggle()">
+                    <ons-icon icon="md-menu"></ons-icon>
+                </ons-toolbar-button>
+            </div>
+            <div class="center">
+                Device - [{{selectedDevice.name}}]
+            </div>
+        </ons-toolbar>
         <div class="content" style="text-align: center">
             <ons-list id="device_list">
                 <ons-list-item tappable ng-repeat="item in availableDevices" ng-click="connectDevice(item)">{{item.name}}</ons-list-item>
@@ -95,7 +108,17 @@
 </ons-template>
 
 <ons-template id="monitor.html">
-    <ons-page  ons-show="app.title = 'Monitor'" ng-controller="MonitorController as monitor">
+    <ons-page   ng-controller="MonitorController as monitor">
+        <ons-toolbar>
+            <div class="left">
+                <ons-toolbar-button ng-click="app.toggle()">
+                    <ons-icon icon="md-menu"></ons-icon>
+                </ons-toolbar-button>
+            </div>
+            <div class="center">
+                Monitor - []
+            </div>
+        </ons-toolbar>
         <div class="content" style="text-align: center">
             <div class="soles_container">
                 <img src="images/soles.png" class="soles_fg" >
@@ -121,13 +144,27 @@
 </ons-template>
 
 <ons-template id="records.html">
-    <ons-page  ons-show="load_records()" >
+    <ons-page  ons-show="load_records()" ng-controller="RecordsController as rc">
+        <ons-toolbar>
+            <div class="left">
+                <ons-toolbar-button ng-click="app.toggle()">
+                    <ons-icon icon="md-menu"></ons-icon>
+                </ons-toolbar-button>
+            </div>
+            <div class="center">
+                Records - [{{selectElem.name}}]
+            </div>
+        </ons-toolbar>
         <div class="content" style="text-align: center" ng-controller="RecordsController">
             <ons-button ng-click="startRecording()" ng-disabled="recording">Start Recording</ons-button>
             <ons-button ng-click="stopRecording()" ng-disabled="!recording">Stop</ons-button>
+            <ons-button ng-click="deleteRecord()" ng-disabled="!selectElem.id">Delete</ons-button>
+
             <ons-list id="record_list">
-                <ons-list-item tappable ng-repeat="item in availableRecords"> {{item.name}}</ons-list-item>
+                <ons-list-item tappable ng-repeat="item in availableRecords" ng-click="select_element(item)"
+                               ng-style=""> {{item.name}}</ons-list-item>
             </ons-list>
+
         </div>
     </ons-page>
 </ons-template>

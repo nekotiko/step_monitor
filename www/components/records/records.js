@@ -11,7 +11,9 @@ angular.module('StepMonitor')
 
             $scope.availableRecords = [],
             $scope.recording = false,
+            $scope.selectedElements = false,
             $scope.recording_zero_instant = 0,
+            $scope.selectElem = null,
 
             $scope.stopRecording = function () {
                 $scope.recording = false;
@@ -23,14 +25,13 @@ angular.module('StepMonitor')
                     $scope.recording = true;
                     $scope.recording_zero_instant = (new Date()).getTime();
                     var name = results.input1;
-                    if (name)
+                    if (name) {
                         $DBService.create_workout(name);
-                    else{
-
+                        $scope.load_records();
+                    } else {
+                        navigator.notification.alert('Could not create record');
                     }
                 }
-
-
              } ,
 
             $scope.startRecording = function () {
@@ -50,15 +51,25 @@ angular.module('StepMonitor')
                 };
                 $DBService.load_workouts(loadRecord);
             },
+            
+            $scope.deleteRecord = function () {
+                console.log('About to delete' + $scope.selectElem.id);
+                $DBService.delete_workout($scope.selectElem.id);
+
+                $scope.load_records();
+            },
+
+            $scope.select_element = function (item) {
+                $scope.selectElem = item;
+
+
+            },
 
             $rootScope.$on(RECORDS_FOUND, function(event_name, records){
-                console.log('Record Found');
-                console.log(records);
-                if (!records){
-                    records.push({id: 'abc', name: 'TEst Record'});
-                }
                 $scope.availableRecords.length = 0;
-                $scope.availableRecords.push(records);
+                 for (var i in records){
+                    $scope.availableRecords.push(records[i]);
+                }
                 $rootScope.$digest();
 
             })
