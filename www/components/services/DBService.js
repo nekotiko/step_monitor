@@ -50,7 +50,7 @@ stepMonitorApp.factory('$DBService', function ($rootScope, $q) {
                     var start_date = (new Date()).toISOString();
 
                     tx.executeSql('INSERT INTO workout VALUES("' + id + '","' +
-                        name + '", "' + start_date + '", null)');
+                        name + '", "' + start_date + '", null);');
                 }, dbService.db_error);
 
             return id;
@@ -62,7 +62,7 @@ stepMonitorApp.factory('$DBService', function ($rootScope, $q) {
 
                 dbService.db_instance.transaction(function (tx) {
                     tx.executeSql('INSERT INTO details VALUES("' + workout_id + '","' +
-                        instant + '", "' + reading_array.join(',') + '", null)');
+                        instant + '", "' + reading_array.join(',') + '", null);');
                 });
 
             } catch (err) {
