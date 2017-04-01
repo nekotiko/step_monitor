@@ -1,10 +1,10 @@
 
-<ons-page  ons-show="app.title = 'Devices'" ng-controller="RecordsController as rc" >
+<ons-page  ons-show="load_records()" ng-controller="RecordsController as rc" >
     <div class="content" style="text-align: center">
         <ons-button ng-click="startRecording()" ng-disabled="recording">Start Recording</ons-button>
         <ons-button ng-click="stopRecording()" ng-disabled="!recording">Stop</ons-button>
         <ons-list id="record_list">
-            <ons-list-item tappable ng-repeat="item in availableRecords" {{item.name}}</ons-list-item>
+            <ons-list-item tappable ng-repeat="item in availableRecords"> {{item.name}}</ons-list-item>
         </ons-list>
 
     </div>

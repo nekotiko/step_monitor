@@ -63,12 +63,12 @@ stepMonitorApp.factory('$BLEService', function ($rootScope, $q) {
 
                     var strData = bytesToString(dataArray);
                     if (strData.indexOf(';') < 0){
-                        console.log("Buffer:" + buffer);
+                        //console.log("Buffer:" + buffer);
                        buffer += strData;
                     } else{
                         strData = buffer + strData;
                         buffer = '';
-                        console.log(strData);
+                        //console.log(strData);
                         $rootScope.$broadcast(bleService.ON_DATA_EVENT, strData.slice(0, -1));
                     }
 

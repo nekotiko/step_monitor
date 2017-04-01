@@ -20,15 +20,17 @@
 
 
 
-    var stepMonitorApp = ons.bootstrap('StepMonitor',[])
+    var stepMonitorApp = ons.bootstrap('StepMonitor',['onsen'])
       .controller('AppController', function($scope, $DBService) {
-
           $DBService.initialize_db();
-
       });
 
+     console.log("twice")
+
   </script>
+
 </head>
+
 <body>
   <ons-page ng-controller="AppController as app" >
     <ons-toolbar>
@@ -42,13 +44,12 @@
     </ons-tabbar>
   </ons-page>
 
-
-
-
 </body>
 <script src="components/services/BLEService.js"></script>
 <script src="components/services/DBService.js"></script>
 <script src="components/devices/devices.js"></script>
 <script src="components/monitor/monitor.js"></script>
 <script src="components/records/records.js"></script>
+
+
 </html>

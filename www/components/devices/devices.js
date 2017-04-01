@@ -7,7 +7,7 @@ var DEVICE_FOUND = 'new_device';
 stepMonitorApp
     .controller('DevicesController', function ($scope, $rootScope, $BLEService, $timeout) {
 
-
+        console.log('Device init'),
 
         $scope.availableDevices = [],
         $scope.selectedDevice = null,
@@ -70,7 +70,7 @@ stepMonitorApp
                 console.debug(device.name);
                 $scope.availableDevices.push(device);
             }
-        }),
+        })
 
 
         document.addEventListener("deviceready", function () {

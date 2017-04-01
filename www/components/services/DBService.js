@@ -58,19 +58,17 @@ stepMonitorApp.factory('$DBService', function ($rootScope, $q) {
 
 
         insert_event: function (workout_id, instant, reading_array) {
-            try {
-
                 dbService.db_instance.transaction(function (tx) {
                     tx.executeSql('INSERT INTO details VALUES("' + workout_id + '","' +
                         instant + '", "' + reading_array.join(',') + '", null);');
-                });
+                },dbService.db_error);
+        },
 
-            } catch (err) {
-                console.error('Create workout Err: ' + err);
-                return err;
-            }
+        load_workouts: function (result_callback) {
+            dbService.db_instance.transaction(function (tx) {
+                tx.executeSql('SELECT id, name FROM workout;', [], result_callback, dbService.db_error)
+            },dbService.db_error);
         }
-
 
     };
 
