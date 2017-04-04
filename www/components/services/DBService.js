@@ -24,7 +24,7 @@ angular.module('StepMonitor').factory('$DBService', function ($rootScope, $q) {
 
 
         db_error: function(err){
-            console.error('DB Init Err: ' + err.message);
+            console.error('DB Err: ' + err.message);
         },
 
 
@@ -35,8 +35,8 @@ angular.module('StepMonitor').factory('$DBService', function ($rootScope, $q) {
                         'start DATE, end DATE );');
 
                     tx.executeSql('CREATE TABLE IF NOT EXISTS details (workout_id , instant INT, ' +
-                        'r_h INT, r_s INT, r_i INT, r_t INT, ' +
-                        'l_h INT, l_s INT, l_i INT, l_t INT); ');
+                        'l_h INT, l_s INT, l_i INT, l_t INT, ' +
+                        'r_h INT, r_s INT, r_i INT, r_t INT); ');
                     console.log('DB successfully initialized');
                 }, dbService.db_error);
 
@@ -59,18 +59,36 @@ angular.module('StepMonitor').factory('$DBService', function ($rootScope, $q) {
 
         insert_event: function (workout_id, instant, reading_array) {
                 dbService.db_instance.transaction(function (tx) {
-                    tx.executeSql('INSERT INTO details VALUES("' + workout_id + '","' +
-                        instant + '", "' + reading_array.join(',') + '", null);');
+                    var query = 'INSERT INTO details VALUES("' + workout_id + '",' +
+                                    instant + ', ' + reading_array.join(',') + ');';
+                    tx.executeSql(query);
                 },dbService.db_error);
         },
 
 
-        delete_workout: function (workout_id) {
-           dbService.db_instance.transaction(function (tx) {
-               tx.executeSql('DELETE FROM details WHERE workout_id = "' + workout_id + '";' ,dbService.db_error);
-               tx.executeSql('DELETE FROM workout WHERE workout = "' + workout_id + '";' ,dbService.db_error);
+        get_workout: function(workout_id, callback){
+            dbService.db_instance.transaction(function (tx) {
+                var query = 'SELECT * FROM workout WHERE id = "' + workout_id + '";';
+                tx.executeSql(query, [], callback, dbService.db_error);
+            });
+        },
 
-           })
+        get_details: function (workout_id, callback) {
+            dbService.db_instance.transaction(function (tx) {
+                var query = 'SELECT * FROM details WHERE workout_id = "' + workout_id + '";';
+                tx.executeSql(query, [], callback, dbService.db_error);
+            });
+        },
+
+        delete_workout: function (workout_id, success_callback) {
+           dbService.db_instance.transaction(function (tx) {
+               var del = 'DELETE FROM details WHERE workout_id = "' + workout_id + '";';
+               tx.executeSql(del);
+
+               del = 'DELETE FROM workout WHERE id = "' + workout_id + '";';
+               tx.executeSql(del);
+
+           }, dbService.db_error, success_callback)
         },
 
         load_workouts: function (result_callback) {

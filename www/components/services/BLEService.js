@@ -29,6 +29,7 @@ angular.module('StepMonitor').factory('$BLEService', function ($rootScope, $q) {
     var bleService = {
 
         ON_DATA_EVENT: 'on_data_event',
+        ON_DATA_TO_STORE: 'on_data_store',
 
         getDeviceList: function () {
 

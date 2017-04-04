@@ -29,19 +29,22 @@ angular.module('StepMonitor')
         $rootScope.$on($BLEService.ON_DATA_EVENT, function (event, strData) {
              try {
                  var data = JSON.parse(strData);
+                 console.log('About to load data ' + strData);
                  if (data.f) {
-                     for (var i in data.f.slice(0,4) ) {
+                     var feet = data.f.slice(0,4);
+                     for (var i in feet ) {
                          //100:255:VALUE:X
-                         var value = parseInt((data.f[i] * 255) / 100);
-                         $scope.RIGHT_FEET[$scope.FEET_PART_INDEX[i]] = value;
-                     }
-
-                     for (var i in data.f.slice(4, 8) ) {
-                         //100:255:VALUE:X
-                         var value = parseInt((data.f[i] * 255) / 100);
+                         var value = parseInt((feet[i] * 255) / 100);
                          $scope.LEFT_FEET[$scope.FEET_PART_INDEX[i]] = value;
                      }
 
+                     feet = data.f.slice(4, 8);
+                     for (var i in feet ) {
+                         //100:255:VALUE:X
+                         var value = parseInt((feet[i] * 255) / 100);
+                         $scope.RIGHT_FEET[$scope.FEET_PART_INDEX[i]] = value;
+                     }
+                     $rootScope.$broadcast($BLEService.ON_DATA_TO_STORE, strData);
                  }
              }catch (err){
                  console.error("MSg: "+ strData);

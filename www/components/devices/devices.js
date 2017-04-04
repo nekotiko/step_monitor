@@ -9,7 +9,7 @@ angular.module('StepMonitor')
 
 
         $scope.availableDevices = [],
-        $scope.selectedDevice = null,
+        $rootScope.selectedDevice = null,
         $scope.requestDataTimer = null,
 
         $scope.loadDevices = function () {
@@ -25,36 +25,37 @@ angular.module('StepMonitor')
         },
 
         $scope.connectDevice = function (device) {
-            $scope.selectedDevice = device;
+            $rootScope.selectedDevice = device;
 
           $BLEService.connect(device.id,
               $scope.onBLEError);
         },
 
-        $scope.startMonitoring = function () {
-            if ($scope.selectedDevice) {
+            $rootScope.startMonitoring = function () {
+            if ($rootScope.selectedDevice) {
                 var requestData = function () {
-                    $BLEService.sendData($scope.selectedDevice.id, 'FOOT_DATA');
+                    $BLEService.sendData($rootScope.selectedDevice.id, 'FOOT_DATA');
                 }
                 $scope.requestDataTimer = $timeout(requestData, 300);
             }
         },
 
         $scope.disconnect = function () {
-            if ($scope.selectedDevice){
-                console.debug('About to Disconnect from ' + $scope.selectedDevice.id);
+            if ($rootScope.selectedDevice){
+                console.debug('About to Disconnect from ' + $rootScope.selectedDevice.id);
                 $timeout.cancel($scope.requestDataTimer);
 
-                $BLEService.disconnect($scope.selectedDevice.id,
+                $BLEService.disconnect($rootScope.selectedDevice.id,
                     $scope.onData, $scope.onBLEError);
 
-                $scope.selectedDevice = null;
+                $rootScope.selectedDevice = null;
 
             }
         },
 
-        $scope.$on($BLEService.ON_DATA_EVENT, function (event, data) {
-            $scope.startMonitoring();
+        $rootScope.$on($BLEService.ON_DATA_EVENT, function (event, data) {
+
+            $rootScope.startMonitoring();
         }),
 
         $scope.onBLEError = function(err){
@@ -64,8 +65,6 @@ angular.module('StepMonitor')
         $rootScope.$on(DEVICE_FOUND, function(event_name, device){
             console.debug('new device found' + device);
             if (device) {
-                console.debug(device.id);
-                console.debug(device.name);
                 $scope.availableDevices.push(device);
             }
         })
