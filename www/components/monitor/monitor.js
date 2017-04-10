@@ -31,14 +31,14 @@ angular.module('StepMonitor')
                  var data = JSON.parse(strData);
                  console.log('About to load data ' + strData);
                  if (data.f) {
-                     var feet = data.f.slice(0,4);
+                     var feet = data.f.slice(0,2);
                      for (var i in feet ) {
                          //100:255:VALUE:X
                          var value = parseInt((feet[i] * 255) / 100);
                          $scope.LEFT_FEET[$scope.FEET_PART_INDEX[i]] = value;
                      }
 
-                     feet = data.f.slice(4, 8);
+                     feet = data.f.slice(2, 4);
                      for (var i in feet ) {
                          //100:255:VALUE:X
                          var value = parseInt((feet[i] * 255) / 100);

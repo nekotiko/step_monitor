@@ -5,11 +5,10 @@
 var DEVICE_FOUND = 'new_device';
 
 angular.module('StepMonitor')
-    .controller('DevicesController', function ($scope, $rootScope, $BLEService, $timeout) {
+    .controller('DevicesController', function ($scope, $rootScope, $BLEService, $timeout, $GlobalState) {
 
 
         $scope.availableDevices = [],
-        $rootScope.selectedDevice = null,
         $scope.requestDataTimer = null,
 
         $scope.loadDevices = function () {
@@ -25,30 +24,30 @@ angular.module('StepMonitor')
         },
 
         $scope.connectDevice = function (device) {
-            $rootScope.selectedDevice = device;
+            $GlobalState.setCurrentDevice(device);
 
           $BLEService.connect(device.id,
               $scope.onBLEError);
         },
 
             $rootScope.startMonitoring = function () {
-            if ($rootScope.selectedDevice) {
+            if ($GlobalState.getCurrentDevice()) {
                 var requestData = function () {
-                    $BLEService.sendData($rootScope.selectedDevice.id, 'FOOT_DATA');
+                    $BLEService.sendData($$GlobalState.getCurrentDevice().id, 'FOOT_DATA');
                 }
                 $scope.requestDataTimer = $timeout(requestData, 300);
             }
         },
 
         $scope.disconnect = function () {
-            if ($rootScope.selectedDevice){
-                console.debug('About to Disconnect from ' + $rootScope.selectedDevice.id);
+            if ($GlobalState.getCurrentDevice()){
+                console.debug('About to Disconnect from ' + $GlobalState.getCurrentDevice().id);
                 $timeout.cancel($scope.requestDataTimer);
 
-                $BLEService.disconnect($rootScope.selectedDevice.id,
+                $BLEService.disconnect($GlobalState.getCurrentDevice().id,
                     $scope.onData, $scope.onBLEError);
 
-                $rootScope.selectedDevice = null;
+                $GlobalState.setCurrentDevice(null);
 
             }
         },

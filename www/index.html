@@ -19,6 +19,7 @@
 
     <script src="components/services/BLEService.js"></script>
     <script src="components/services/DBService.js"></script>
+    <script src="components/services/GlobalState.js"></script>
 
     <script src="components/devices/devices.js"></script>
     <script src="components/monitor/monitor.js"></script>
@@ -160,9 +161,9 @@
             </div>
         </ons-toolbar>
         <div class="content" style="text-align: center" >
-            <ons-button ng-click="startRecording()" ng-disabled="recording">Start Recording</ons-button>
+            <ons-button ng-click="startRecording()" ng-disabled="recording">Record</ons-button>
             <ons-button ng-click="stopRecording()" ng-disabled="!recording">Stop</ons-button>
-            <ons-button ng-click="deleteRecord()" ng-disabled="!selectElem.id">Delete</ons-button>
+            <ons-button ng-click="deleteRecord()" ng-disabled="!selectElem.id">Del</ons-button>
             <ons-button ng-click="sentRecord()" ng-disabled="!selectElem.id">Send</ons-button>
 
             <ons-list id="record_list">

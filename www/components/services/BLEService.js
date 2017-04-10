@@ -26,7 +26,10 @@ angular.module('StepMonitor').factory('$BLEService', function ($rootScope, $q) {
         rxCharacteristic: '6e400003-b5a3-f393-e0a9-e50e24dcca9e'  // receive is from the phone's perspective
     };
 
+    console.log('bleSErviece instance ');
+
     var bleService = {
+
 
         ON_DATA_EVENT: 'on_data_event',
         ON_DATA_TO_STORE: 'on_data_store',
