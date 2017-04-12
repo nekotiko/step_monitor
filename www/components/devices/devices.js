@@ -23,21 +23,41 @@ angular.module('StepMonitor')
            )
         },
 
+        $scope.selectedDevice = function () {
+            if (!$GlobalState.getCurrentDevice()){
+                return null;
+            }
+            return $GlobalState.getCurrentDevice();
+        }
+
         $scope.connectDevice = function (device) {
             $GlobalState.setCurrentDevice(device);
 
-          $BLEService.connect(device.id,
-              $scope.onBLEError);
+
         },
 
-            $rootScope.startMonitoring = function () {
+            $scope.startMonitoring = function () {
             if ($GlobalState.getCurrentDevice()) {
+
+                $BLEService.connect($GlobalState.getCurrentDevice().id,
+                    $scope.onBLEError);
+
                 var requestData = function () {
-                    $BLEService.sendData($$GlobalState.getCurrentDevice().id, 'FOOT_DATA');
+                    $BLEService.sendData($GlobalState.getCurrentDevice().id, 'FOOT_DATA');
                 }
                 $scope.requestDataTimer = $timeout(requestData, 300);
             }
         },
+
+        $scope.selectedDeviceName = function () {
+           var device =  $scope.selectedDevice();
+           var value = '';
+           if (device){
+               value = device.name;
+           }
+           return value;
+
+        }
 
         $scope.disconnect = function () {
             if ($GlobalState.getCurrentDevice()){
@@ -54,7 +74,10 @@ angular.module('StepMonitor')
 
         $rootScope.$on($BLEService.ON_DATA_EVENT, function (event, data) {
 
-            $rootScope.startMonitoring();
+            var requestData = function () {
+                $BLEService.sendData($GlobalState.getCurrentDevice().id, 'FOOT_DATA');
+            }
+            $scope.requestDataTimer = $timeout(requestData, 300);
         }),
 
         $scope.onBLEError = function(err){

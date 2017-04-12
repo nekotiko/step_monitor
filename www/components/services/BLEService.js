@@ -142,6 +142,7 @@ angular.module('StepMonitor').factory('$BLEService', function ($rootScope, $q) {
             }
 
         },
+
         disconnect: function (deviceId, onDisconect, onError) {
             ble.disconnect(deviceId, onDisconect, onError);
         },

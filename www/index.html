@@ -99,15 +99,15 @@
                 </ons-toolbar-button>
             </div>
             <div class="center">
-                Device - [{{selectedDevice.name}}]
+                   Device - [{{selectedDeviceName()}}]
             </div>
         </ons-toolbar>
         <div class="content" style="text-align: center">
             <ons-list id="device_list">
                 <ons-list-item tappable ng-repeat="item in availableDevices" ng-click="connectDevice(item)">{{item.name}}</ons-list-item>
             </ons-list>
-            <ons-button ng-click="startMonitoring()" ng-disabled="!selectedDevice">Start Data</ons-button>
-            <ons-button ng-click="disconnect()" ng-disabled="!selectedDevice">Disconnect</ons-button>
+            <ons-button ng-click="startMonitoring()" ng-disabled="!selectedDevice()">Start Data</ons-button>
+            <ons-button ng-click="disconnect()" ng-disabled="!selectedDevice()">Disconnect</ons-button>
         </div>
     </ons-page>
 </ons-template>
