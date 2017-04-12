@@ -28,6 +28,10 @@ angular.module('StepMonitor').factory('$BLEService', function ($rootScope, $q) {
 
     console.log('bleSErviece instance ');
 
+
+
+
+
     var bleService = {
 
 
@@ -152,6 +156,9 @@ angular.module('StepMonitor').factory('$BLEService', function ($rootScope, $q) {
             console.log("ERROR: " + reason); // real apps should use notification.alert
         }
     };
+
+
+
 
     return bleService;
 })

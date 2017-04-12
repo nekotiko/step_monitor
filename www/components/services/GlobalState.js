@@ -5,52 +5,55 @@
 angular.module('StepMonitor').factory('$GlobalState', function ($rootScope, $q) {
 
 
-    var current_device = '';
-    //Recording
-    var recording = false;
-    var recording_zero_instant = 0;
-    var last_state = 0;
-    var current_recording = null;
+
 
 
     var globalState = {
 
+            current_device: '',
+            //Recordin
+            recording: false,
+            recording_zero_instant: 0,
+            last_state: 0,
+            current_recording: null,
+
             getCurrentDevice: function() {
-                return current_device;
+                return this.current_device;
             },
 
             setCurrentDevice: function (current_device) {
-                currentDevice = current_device;
+                this.current_device = current_device;
             },
 
             startRecording: function () {
-                recording = true;
+                this.recording = true;
             },
 
             stopRecording: function () {
-                recording = false;
+                this.recording = false;
             },
 
             recordingState: function () {
-                return recording;
+                return this.recording;
             },
 
             setZeroInstant: function (zero_i) {
-                recording_zero_instant = zero_i;
+                this.recording_zero_instant = zero_i;
             },
 
             getZeroInstant: function () {
-                return recording_zero_instant;
+                return this.recording_zero_instant;
             },
 
             setCurrentRecordingId: function (id) {
-                current_recording = id;
+                this.current_recording = id;
             },
 
             getCurrentRecoringId: function () {
-                return current_recording;
+                return this.current_recording;
 
             }
+
 
 
 

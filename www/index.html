@@ -17,9 +17,10 @@
         ons.bootstrap('StepMonitor', []);
     </script>
 
+    <script src="components/services/GlobalState.js"></script>
     <script src="components/services/BLEService.js"></script>
     <script src="components/services/DBService.js"></script>
-    <script src="components/services/GlobalState.js"></script>
+
 
     <script src="components/devices/devices.js"></script>
     <script src="components/monitor/monitor.js"></script>
@@ -27,7 +28,10 @@
 
     <script>
         angular.module('StepMonitor')
-            .controller('AppController', function($scope, $DBService) {
+            .controller('AppController', function($scope, $DBService, $rootScope, $timeout, $GlobalState, $BLEService) {
+
+                $scope.requestDataTimer = null;
+
                 this.load = function(page) {
                     $scope.splitter.content.load(page);
                     $scope.splitter.left.close();
@@ -39,6 +43,16 @@
 
                 $DBService.initialize_db();
 
+
+
+
+                $scope.$on($BLEService.ON_DATA_EVENT, function (event, data) {
+
+                    var requestData = function () {
+                        $BLEService.sendData($GlobalState.getCurrentDevice().id, 'FOOT_DATA');
+                    }
+                    $scope.requestDataTimer = $timeout(requestData, 300);
+                })
 
 
 
@@ -106,8 +120,8 @@
             <ons-list id="device_list">
                 <ons-list-item tappable ng-repeat="item in availableDevices" ng-click="connectDevice(item)">{{item.name}}</ons-list-item>
             </ons-list>
-            <ons-button ng-click="startMonitoring()" ng-disabled="!selectedDevice()">Start Data</ons-button>
-            <ons-button ng-click="disconnect()" ng-disabled="!selectedDevice()">Disconnect</ons-button>
+            <ons-button ng-click="startMonitoring()" ng-disabled="!monitorableDevice">Start Data</ons-button>
+            <ons-button ng-click="disconnect()" ng-disabled="selectedDevice()">Disconnect</ons-button>
         </div>
     </ons-page>
 </ons-template>
