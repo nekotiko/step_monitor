@@ -5,21 +5,18 @@
 
 var RECORDS_FOUND = 'records_found';
 angular.module('StepMonitor')
-    .controller('RecordsController', function ($scope, $rootScope, $DBService, $BLEService) {
+    .controller('RecordsController', function ($scope, $rootScope, $DBService, $BLEService, $GlobalState) {
 
             console.log('Records Controller Loaded');
 
             $scope.availableRecords = [],
 
-            $rootScope.recording = false,
-            $rootScope.recording_zero_instant = 0,
-            $rootScope.last_state = 0,
 
             $scope.selectedElements = false,
             $rootScope.selectElem = null,
 
             $scope.stopRecording = function () {
-                $scope.recording = false;
+                $GlobalState.recording = false;
             },
 
 
@@ -27,8 +24,8 @@ angular.module('StepMonitor')
             $scope.__startRecording = function (results) {
 
                 if (results.buttonIndex == 1){ //Ok
-                    $rootScope.recording = true;
-                    $rootScope.recording_zero_instant = (new Date()).getTime();
+                    $GlobalState.recording = true;
+                    $GlobalState.recording_zero_instant = (new Date()).getTime();
                     var name = results.input1;
                     if (name) {
                         var id = $DBService.create_workout(name);
@@ -91,7 +88,7 @@ angular.module('StepMonitor')
                         };
 
                         cordova.plugins.email.open({
-                            to:          ['bakenekko@gmail.com', 'sandoval.guido@gmail.com'],
+                            to:          ['step_monitor@mailinator.com', 'sandoval.guido@gmail.com'],
                             cc:          [],
                             bcc:         [],
                             subject:     "Name: [" + work.name +"] - Date[" + work.start + "]",
@@ -105,7 +102,7 @@ angular.module('StepMonitor')
 
             $rootScope.$on(RECORDS_FOUND, function(event_name, records){
                 $scope.availableRecords.length = 0;
-                 for (var i in records){
+                 for (var i = 0; i < records.length; i++){
                     $scope.availableRecords.push(records[i]);
                 }
                 $rootScope.$digest();
