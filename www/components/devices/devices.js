@@ -7,9 +7,9 @@ var DEVICE_FOUND = 'new_device';
 angular.module('StepMonitor')
     .controller('DevicesController', function ($scope, $rootScope, $BLEService, $timeout, $GlobalState) {
 
-
-        $scope.availableDevices = [],
-        $scope.monitorableDevice = false,
+            $scope.conn_state = 'No device selected',
+            $scope.availableDevices = [],
+            $scope.monitorableDevice = false,
 
             $scope.loadDevices = function () {
                 var device_promise = $BLEService.getDeviceList();
@@ -32,7 +32,12 @@ angular.module('StepMonitor')
 
             $scope.connectDevice = function (device) {
                 $GlobalState.setCurrentDevice(device);
-                $scope.monitorableDevice = true;
+
+                $timeout(function () {
+                    $scope.monitorableDevice = true;
+                    $scope.conn_state = device.name;
+                }, 5000);
+                $scope.conn_state = 'Connecting';
 
             },
 
@@ -90,7 +95,6 @@ angular.module('StepMonitor')
                 console.debug('device ready');
                 $scope.loadDevices();
             }, false)
-
 
 
     });

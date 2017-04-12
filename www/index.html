@@ -120,8 +120,8 @@
             <ons-list id="device_list">
                 <ons-list-item tappable ng-repeat="item in availableDevices" ng-click="connectDevice(item)">{{item.name}}</ons-list-item>
             </ons-list>
-            <ons-button ng-click="startMonitoring()" ng-disabled="!monitorableDevice">Start Data</ons-button>
-            <ons-button ng-click="disconnect()" ng-disabled="selectedDevice()">Disconnect</ons-button>
+            <ons-button ng-click="startMonitoring()" ng-disabled="!monitorableDevice">{{conn_state}}</ons-button>
+            <ons-button ng-click="disconnect()" ng-disabled="!selectedDevice()">Disconnect</ons-button>
         </div>
     </ons-page>
 </ons-template>
