@@ -33,6 +33,9 @@ angular.module('StepMonitor')
             $scope.connectDevice = function (device) {
                 $GlobalState.setCurrentDevice(device);
 
+                $BLEService.connect($GlobalState.getCurrentDevice().id,
+                    $scope.onBLEError);
+
                 $timeout(function () {
                     $scope.monitorableDevice = true;
                     $scope.conn_state = device.name;
@@ -43,14 +46,10 @@ angular.module('StepMonitor')
 
             $scope.startMonitoring = function () {
                 if ($GlobalState.getCurrentDevice()) {
-
-                    $BLEService.connect($GlobalState.getCurrentDevice().id,
-                        $scope.onBLEError);
-
                     var requestData = function () {
                         $BLEService.sendData($GlobalState.getCurrentDevice().id, 'FOOT_DATA');
+                        $scope.monitorableDevice = false;
                     }
-
                     $timeout(requestData, 300);
                 }
             },

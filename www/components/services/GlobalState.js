@@ -5,9 +5,6 @@
 angular.module('StepMonitor').factory('$GlobalState', function ($rootScope, $q) {
 
 
-
-
-
     var globalState = {
 
             current_device: '',
@@ -52,6 +49,14 @@ angular.module('StepMonitor').factory('$GlobalState', function ($rootScope, $q) 
             getCurrentRecoringId: function () {
                 return this.current_recording;
 
+            },
+
+            getLastState: function () {
+                return this.last_state;
+            },
+
+            setLastState: function (state) {
+                this.last_state = state;
             }
 
 

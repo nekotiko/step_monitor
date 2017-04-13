@@ -182,7 +182,7 @@
 
             <ons-list id="record_list">
                 <ons-list-item tappable ng-repeat="item in availableRecords" ng-click="select_element(item)"
-                               ng-style=""> {{item.name}}</ons-list-item>
+                               ng-class="{selected_background: item.selected}"> {{item.name}} </ons-list-item>
             </ons-list>
 
         </div>
