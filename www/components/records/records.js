@@ -135,6 +135,18 @@ angular.module('StepMonitor')
 
             $rootScope.$on($BLEService.ON_DATA_TO_STORE, function (event, strData) {
 
+
+                /*
+                * Increase the value of each element so different orders of the same value does not repeat the last state
+                *
+                *
+                *
+                * */
+                var pow = function (elem, index) {
+                    return Math.pow(elem, 2 * (index + 1));
+                }
+
+                //Add all elements to get a value
                 var add = function (a, b) {
                     return a + b;
                 };
@@ -144,7 +156,9 @@ angular.module('StepMonitor')
                         var data = JSON.parse(strData);
                         var vector = data.f;
 
-                        var state = vector.reduce(add);
+                        var sqrtV = vector.map(pow);
+                        var state = sqrtV.reduce(add);
+
                         if (state != $GlobalState.getLastState()) {
                             $GlobalState.setLastState(state);
 

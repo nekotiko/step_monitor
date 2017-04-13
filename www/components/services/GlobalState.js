@@ -28,6 +28,9 @@ angular.module('StepMonitor').factory('$GlobalState', function ($rootScope, $q) 
 
             stopRecording: function () {
                 this.recording = false;
+                this.last_state = 0;
+                this.recording_zero_instant = 0;
+                current_recording = '';
             },
 
             recordingState: function () {
