@@ -5,7 +5,7 @@
 
 
 angular.module('StepMonitor')
-    .controller('MonitorController', function ($scope, $rootScope, $BLEService) {
+    .controller('MonitorController', function ($scope, $rootScope, $BLEService, $GlobalState) {
 
         //What the device send should match this order
         $scope.FEET_PART_INDEX = ['H', 'I', 'S', 'T'],
@@ -26,6 +26,16 @@ angular.module('StepMonitor')
                 'T': 255
 
             },
+
+            $scope.currentRecord = function(){
+               var value = 'No Recording';
+               if ($GlobalState.getCurrentRecoringId()){
+                  value = $GlobalState.getCurrentRecoringId().name;
+               }
+                return value;
+            },
+
+
 
             $rootScope.$on($BLEService.ON_DATA_EVENT, function (event, strData) {
                 try {

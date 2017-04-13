@@ -35,8 +35,8 @@ angular.module('StepMonitor').factory('$DBService', function ($rootScope, $q) {
                         'start DATE, end DATE );');
 
                     tx.executeSql('CREATE TABLE IF NOT EXISTS details (workout_id , instant INT, ' +
-                        'l_h INT, l_s INT, l_i INT, l_t INT, ' +
-                        'r_h INT, r_s INT, r_i INT, r_t INT); ');
+                        'l_h INT, l_s INT, ' +
+                        'r_h INT, r_s INT); ');
                     console.log('DB successfully initialized');
                 }, dbService.db_error);
 
@@ -95,6 +95,7 @@ angular.module('StepMonitor').factory('$DBService', function ($rootScope, $q) {
             dbService.db_instance.transaction(function (tx) {
                 tx.executeSql('SELECT id, name FROM workout;', [], result_callback, dbService.db_error)
             },dbService.db_error);
+            $rootScope.selectElem = null;
         }
 
     };

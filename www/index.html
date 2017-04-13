@@ -135,7 +135,7 @@
                 </ons-toolbar-button>
             </div>
             <div class="center">
-                Monitor - []
+                Monitor - [{{currentRecord()}}]
             </div>
         </ons-toolbar>
         <div class="content" style="text-align: center">
@@ -171,12 +171,12 @@
                 </ons-toolbar-button>
             </div>
             <div class="center">
-                Records - [{{selectElem.name}}]
+                Records - [{{getRecordingName()}}]
             </div>
         </ons-toolbar>
         <div class="content" style="text-align: center" >
-            <ons-button ng-click="startRecording()" ng-disabled="recording">Record</ons-button>
-            <ons-button ng-click="stopRecording()" ng-disabled="!recording">Stop</ons-button>
+            <ons-button ng-click="startRecording()" ng-disabled="!canRecord()">Record</ons-button>
+            <ons-button ng-click="stopRecording()" ng-disabled="!canStopRecording()">Stop</ons-button>
             <ons-button ng-click="deleteRecord()" ng-disabled="!selectElem.id">Del</ons-button>
             <ons-button ng-click="sentRecord()" ng-disabled="!selectElem.id">Send</ons-button>
 

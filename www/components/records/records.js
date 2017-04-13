@@ -24,6 +24,7 @@ angular.module('StepMonitor')
                     if (name) {
                         var id = $DBService.create_workout(name);
                         $rootScope.selectElem = {'id': id, 'name': name};
+                        $GlobalState.setCurrentRecordingId($rootScope.selectElem);
                         $scope.load_records();
                     } else {
                         navigator.notification.alert('Could not create record');
@@ -42,6 +43,15 @@ angular.module('StepMonitor')
                 );
             },
 
+            $scope.canRecord = function () {
+                return (typeof($GlobalState.getCurrentDevice()) == "object" &&
+                       !$GlobalState.recordingState());
+            },
+
+            $scope.canStopRecording = function () {
+                return  $GlobalState.recordingState();
+            },
+
             $scope.load_records = function () {
                 var loadRecord = function (tx, results) {
                     $rootScope.$broadcast(RECORDS_FOUND, results.rows);
@@ -51,10 +61,15 @@ angular.module('StepMonitor')
 
             $scope.deleteRecord = function () {
                 console.log('About to delete: ' + $rootScope.selectElem.id);
-                $DBService.delete_workout($rootScope.selectElem.id, function () {
-                    $scope.load_records();
-                });
-
+                ons.notification.confirm({message: 'Are you sure you want to delete: \n ' +  $rootScope.selectElem.name})
+                    .then(function(name) {
+                        console.log(name);
+                        if (name === 1){//1 == ok
+                            $DBService.delete_workout($rootScope.selectElem.id, function () {
+                                $scope.load_records();
+                            });
+                        }
+                    });
             },
 
             $scope.select_element = function (item) {
@@ -75,9 +90,9 @@ angular.module('StepMonitor')
 
                         var msg = "Name: [" + work.name + "] - Date[" + work.start + "]\n";
                         msg += "INSTANT,LEFT_HEEL,LEFT_SOLE,RIGHT_HEEL,RIGHT_SOLE\n";
-                        for (var i in details.rows) {
+                        for (var i = 0; i <  details.rows.length; i++) {
                             var d = details.rows.item(i);
-                            msg += d.instant + "," + d.l_h + "," + d.l_i + "," + d.r_h + "," + d.r_i + "\n";
+                            msg += d.instant + "," + d.l_h + "," + d.l_s + "," + d.r_h + "," + d.r_s + "\n";
                         }
 
                         var callback = function (msg) {
@@ -107,6 +122,17 @@ angular.module('StepMonitor')
 
             }),
 
+
+            $scope.getRecordingName = function(){
+                var value = '';
+                if ($GlobalState.recordingState()){
+                    value =  $GlobalState.getCurrentRecoringId().name;
+                }else if ($rootScope.selectElem){
+                    value = $rootScope.selectElem.name;
+                }
+                return value;
+            }
+
             $rootScope.$on($BLEService.ON_DATA_TO_STORE, function (event, strData) {
 
                 var add = function (a, b) {
@@ -124,7 +150,7 @@ angular.module('StepMonitor')
 
                             var instant = (new Date()).getTime();
                             instant = instant - $GlobalState.getZeroInstant();
-                            $DBService.insert_event($rootScope.selectElem.id,
+                            $DBService.insert_event($GlobalState.getCurrentRecoringId().id,
                                 instant, vector);
                         }
                     }
